@@ -6,6 +6,7 @@ import Footer from './components/layout/Footer';
 import FloatingWhatsApp from './components/layout/FloatingWhatsApp';
 import AtmosphericParticles3D from './components/3d/AtmosphericParticles3D';
 import InteractiveCursor3D from './components/3d/InteractiveCursor3D';
+import Preloader from './components/ui/Preloader';
 import { SecurityGuard } from './security';
 
 // Pages
@@ -87,6 +88,9 @@ export default function App() {
 
           {/* Dedicated Frontend Security Layer (NerdTech Labs) */}
           <SecurityGuard />
+
+          {/* Cinematic Prison-Gate Preloader */}
+          <Preloader />
 
           <TopBanner />
           <Navbar />

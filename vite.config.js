@@ -9,14 +9,24 @@ export default defineConfig({
     port: 3000,
     open: true,
   },
+  esbuild: {
+    legalComments: 'none',
+    drop: ['debugger'],
+  },
   build: {
+    sourcemap: false,
+    minify: 'esbuild',
     chunkSizeWarningLimit: 1200,
     rollupOptions: {
       output: {
+        // Opaque hashed filenames to obscure module names & internal structure in DevTools
+        entryFileNames: 'assets/m-[hash].js',
+        chunkFileNames: 'assets/c-[hash].js',
+        assetFileNames: 'assets/a-[hash][extname]',
         manualChunks: {
-          'three-vendor': ['three'],
-          'react-vendor': ['react', 'react-dom', 'react-router-dom'],
-          'ui-vendor': ['framer-motion', 'lucide-react'],
+          v3: ['three'],
+          vr: ['react', 'react-dom', 'react-router-dom'],
+          vu: ['framer-motion', 'lucide-react'],
         },
       },
     },

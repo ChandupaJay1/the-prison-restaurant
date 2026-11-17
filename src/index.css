@@ -137,3 +137,14 @@
 .backface-hidden {
   backface-visibility: hidden;
 }
+
+/* Media & Asset Protection (NerdTech Labs Security Layer) */
+img,
+canvas {
+  -webkit-user-drag: none;
+  -khtml-user-drag: none;
+  -moz-user-drag: none;
+  -o-user-drag: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+}

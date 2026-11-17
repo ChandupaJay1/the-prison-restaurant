@@ -6,6 +6,7 @@ import Footer from './components/layout/Footer';
 import FloatingWhatsApp from './components/layout/FloatingWhatsApp';
 import AtmosphericParticles3D from './components/3d/AtmosphericParticles3D';
 import InteractiveCursor3D from './components/3d/InteractiveCursor3D';
+import { SecurityGuard } from './security';
 
 // Pages
 import HomePage from './pages/HomePage';
@@ -83,6 +84,9 @@ export default function App() {
 
           {/* Interactive Magnetic 3D Cursor */}
           <InteractiveCursor3D />
+
+          {/* Dedicated Frontend Security Layer (NerdTech Labs) */}
+          <SecurityGuard />
 
           <TopBanner />
           <Navbar />

@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { Calendar, Clock, Wine, ShieldAlert, Phone, Users, Check } from 'lucide-react';
 import ReservationForm from '../components/reservation/ReservationForm';
 import PrisonHazardBorder from '../components/ui/PrisonHazardBorder';
+import ThunderStormEffect from '../components/3d/ThunderStormEffect';
 import { RESTAURANT_INFO } from '../data/restaurantData';
 
 export default function ReservationsPage() {
@@ -20,6 +21,9 @@ export default function ReservationsPage() {
           <div className="absolute inset-0 bg-gradient-to-t from-prison-950 via-prison-950/75 to-transparent" />
           <div className="absolute inset-0 bg-prison-bars opacity-30 pointer-events-none" />
         </div>
+
+        {/* Cinematic Thunder & Lightning Storm Atmosphere */}
+        <ThunderStormEffect interactive={false} />
 
         <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded bg-prison-gold/15 border border-prison-gold/40 text-prison-gold text-xs font-bold uppercase tracking-widest mb-4">

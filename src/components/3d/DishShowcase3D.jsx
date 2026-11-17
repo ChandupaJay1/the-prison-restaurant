@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from 'react';
 import * as THREE from 'three';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
-  RotateCw, 
   Flame, 
   Sparkles, 
   CheckCircle2, 
@@ -11,11 +10,7 @@ import {
   MessageSquare, 
   Calendar,
   Layers,
-  UtensilsCrossed,
-  Play,
-  Pause,
-  Compass,
-  Maximize2
+  UtensilsCrossed
 } from 'lucide-react';
 import Button from '../ui/Button';
 import { RESTAURANT_INFO } from '../../data/restaurantData';
@@ -99,7 +94,6 @@ const SHOWCASE_DISHES = [
 export default function DishShowcase3D() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [selectedPortionIdx, setSelectedPortionIdx] = useState(0);
-  const [isAutoSpinning, setIsAutoSpinning] = useState(false);
   const canvasRef = useRef(null);
 
   const activeDish = SHOWCASE_DISHES[currentIndex];
@@ -137,12 +131,6 @@ export default function DishShowcase3D() {
     }
   };
 
-  const resetView = () => {
-    stageRef.current.drag.rotY = 0;
-    stageRef.current.mouse.targetX = 0;
-    stageRef.current.mouse.targetY = 0;
-  };
-
   // Three.js Scene Setup
   useEffect(() => {
     const container = canvasRef.current;
@@ -154,10 +142,16 @@ export default function DishShowcase3D() {
     const scene = new THREE.Scene();
     stageRef.current.scene = scene;
 
-    // Modern studio camera with shallow perspective
+    // Modern studio camera with responsive mobile framing
     const camera = new THREE.PerspectiveCamera(36, width / height, 0.1, 50);
-    camera.position.set(0, 0.1, 4.7);
-    camera.lookAt(0, 0, 0);
+    const updateCameraFraming = (w, h) => {
+      const aspect = w / Math.max(h, 1);
+      camera.aspect = aspect;
+      camera.position.set(0, 0.1, aspect < 1 ? Math.min(6.4, 4.7 / aspect) : 4.7);
+      camera.lookAt(0, 0, 0);
+      camera.updateProjectionMatrix();
+    };
+    updateCameraFraming(width, height);
     stageRef.current.camera = camera;
 
     const renderer = new THREE.WebGLRenderer({
@@ -368,54 +362,64 @@ export default function DishShowcase3D() {
     stageRef.current.particles = particles;
 
     // Load initial texture
-    textureLoader.load(activeDish.image, (tex) => {
+    textureLoader.load(SHOWCASE_DISHES[0].image, (tex) => {
       tex.colorSpace = THREE.SRGBColorSpace;
       posterMat.map = tex;
       posterMat.needsUpdate = true;
     });
 
-    // --- 4. Interactive Cursor Parallax & 360° Drag Handlers ---
-    const handleMouseMove = (e) => {
-      const rect = container.getBoundingClientRect();
-      const normX = ((e.clientX - rect.left) / rect.width) * 2 - 1;
-      const normY = -(((e.clientY - rect.top) / rect.height) * 2 - 1);
-      stageRef.current.mouse.targetX = normX;
-      stageRef.current.mouse.targetY = normY;
-    };
-
+    // --- 4. Unified Pointer Events (Mobile Touch & Desktop Mouse Safe) ---
     const handlePointerDown = (e) => {
+      if (!Number.isFinite(e.clientX)) return;
       stageRef.current.drag.isDown = true;
-      stageRef.current.drag.startX = e.clientX || (e.touches && e.touches[0].clientX) || 0;
+      stageRef.current.drag.startX = e.clientX;
     };
 
     const handlePointerMove = (e) => {
+      if (!Number.isFinite(e.clientX) || !Number.isFinite(e.clientY)) return;
+
+      // Subtle hover tilt for mouse pointers only (prevents jumpy mobile tap behavior)
+      if (e.pointerType === 'mouse') {
+        const rect = container.getBoundingClientRect();
+        if (rect.width > 0 && rect.height > 0) {
+          const normX = Math.max(-1, Math.min(1, ((e.clientX - rect.left) / rect.width) * 2 - 1));
+          const normY = Math.max(-1, Math.min(1, -(((e.clientY - rect.top) / rect.height) * 2 - 1)));
+          stageRef.current.mouse.targetX = normX;
+          stageRef.current.mouse.targetY = normY;
+        }
+      }
+
       if (!stageRef.current.drag.isDown) return;
-      const clientX = e.clientX || (e.touches && e.touches[0].clientX) || 0;
-      const deltaX = clientX - stageRef.current.drag.startX;
-      stageRef.current.drag.rotY += deltaX * 0.009;
-      stageRef.current.drag.startX = clientX;
+      const deltaX = e.clientX - stageRef.current.drag.startX;
+      if (Number.isFinite(deltaX)) {
+        stageRef.current.drag.rotY += deltaX * 0.009;
+      }
+      stageRef.current.drag.startX = e.clientX;
     };
 
     const handlePointerUp = () => {
       stageRef.current.drag.isDown = false;
     };
 
-    container.addEventListener('mousemove', handleMouseMove);
+    const handlePointerLeave = () => {
+      stageRef.current.mouse.targetX = 0;
+      stageRef.current.mouse.targetY = 0;
+    };
+
     container.addEventListener('pointerdown', handlePointerDown);
+    container.addEventListener('pointerleave', handlePointerLeave);
     window.addEventListener('pointermove', handlePointerMove);
     window.addEventListener('pointerup', handlePointerUp);
-
-    container.addEventListener('touchmove', handleMouseMove, { passive: true });
-    container.addEventListener('touchstart', handlePointerDown, { passive: true });
-    window.addEventListener('touchend', handlePointerUp);
+    window.addEventListener('pointercancel', handlePointerUp);
 
     const handleResize = () => {
       if (!container || !renderer || !camera) return;
       const newW = container.clientWidth;
       const newH = container.clientHeight;
-      camera.aspect = newW / newH;
-      camera.updateProjectionMatrix();
-      renderer.setSize(newW, newH);
+      if (newW > 0 && newH > 0) {
+        updateCameraFraming(newW, newH);
+        renderer.setSize(newW, newH);
+      }
     };
     window.addEventListener('resize', handleResize);
 
@@ -427,25 +431,25 @@ export default function DishShowcase3D() {
       if (!stageRef.current.isVisible) return;
       const elapsed = clock.getElapsedTime();
 
-      // Smooth mouse lerp
+      // Smooth mouse lerp with finite guards
       const { mouse, drag, turntableGroup, floatingCardGroup } = stageRef.current;
+      if (!Number.isFinite(mouse.targetX)) mouse.targetX = 0;
+      if (!Number.isFinite(mouse.targetY)) mouse.targetY = 0;
+      if (!Number.isFinite(drag.rotY)) drag.rotY = 0;
+
       mouse.x += (mouse.targetX - mouse.x) * 0.06;
       mouse.y += (mouse.targetY - mouse.y) * 0.06;
 
       // Smooth floating card levitation
       if (floatingCardGroup) {
         floatingCardGroup.position.y = 0.05 + Math.sin(elapsed * 1.5) * 0.06;
-        // Interactive 3D tilt response to cursor position
         floatingCardGroup.rotation.x = 0.04 - mouse.y * 0.15;
         floatingCardGroup.rotation.z = -mouse.x * 0.08;
       }
 
       // Turntable Y-rotation
       if (turntableGroup) {
-        if (isAutoSpinning) {
-          drag.rotY += 0.012; // active continuous spin
-          turntableGroup.rotation.y += (drag.rotY - turntableGroup.rotation.y) * 0.1;
-        } else if (drag.isDown) {
+        if (drag.isDown) {
           turntableGroup.rotation.y += (drag.rotY - turntableGroup.rotation.y) * 0.14;
         } else {
           // Keep poster facing user with slight organic breathing sway
@@ -475,16 +479,17 @@ export default function DishShowcase3D() {
 
     return () => {
       if (stageRef.current.animId) cancelAnimationFrame(stageRef.current.animId);
-      container.removeEventListener('mousemove', handleMouseMove);
       container.removeEventListener('pointerdown', handlePointerDown);
+      container.removeEventListener('pointerleave', handlePointerLeave);
       window.removeEventListener('pointermove', handlePointerMove);
       window.removeEventListener('pointerup', handlePointerUp);
+      window.removeEventListener('pointercancel', handlePointerUp);
       window.removeEventListener('resize', handleResize);
       try {
         renderer.dispose();
       } catch (e) {}
     };
-  }, [isAutoSpinning]);
+  }, []);
 
   // Update texture when dish changes
   useEffect(() => {
@@ -564,51 +569,10 @@ export default function DishShowcase3D() {
               <div className="absolute -top-32 -left-32 w-64 h-64 bg-prison-gold/10 rounded-full blur-3xl pointer-events-none" />
               <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
 
-              {/* Top HUD Status Bar */}
-              <div className="flex items-center justify-between gap-3 mb-2 relative z-20">
-                <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-prison-950/80 border border-emerald-500/30 text-emerald-400 text-xs font-bold uppercase tracking-wider shadow-sm backdrop-blur-md">
-                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
-                  <span>3D Interactive Stage</span>
-                </div>
-
-                <div className="flex items-center gap-2">
-                  {/* Auto Spin Toggle */}
-                  <button
-                    onClick={() => setIsAutoSpinning(!isAutoSpinning)}
-                    className={`flex items-center gap-1.5 px-3 py-1 rounded-full border text-xs font-bold uppercase tracking-wider transition-all duration-300 shadow-sm ${
-                      isAutoSpinning
-                        ? 'bg-prison-gold text-prison-950 border-prison-gold shadow-glow-gold'
-                        : 'bg-prison-900/80 text-slate-300 border-prison-700 hover:border-prison-gold'
-                    }`}
-                  >
-                    {isAutoSpinning ? (
-                      <>
-                        <Pause className="w-3 h-3" />
-                        <span>Spinning</span>
-                      </>
-                    ) : (
-                      <>
-                        <Play className="w-3 h-3" />
-                        <span>Auto Spin</span>
-                      </>
-                    )}
-                  </button>
-
-                  {/* Reset Angle Button */}
-                  <button
-                    onClick={resetView}
-                    title="Reset to Front View"
-                    className="p-1.5 rounded-full bg-prison-900/80 border border-prison-700 text-slate-400 hover:text-prison-gold hover:border-prison-gold transition-colors"
-                  >
-                    <Compass className="w-3.5 h-3.5" />
-                  </button>
-                </div>
-              </div>
-
               {/* Three.js WebGL Canvas Viewport */}
               <div
                 ref={canvasRef}
-                className="w-full h-[390px] sm:h-[460px] md:h-[500px] cursor-grab active:cursor-grabbing relative"
+                className="w-full h-[390px] sm:h-[460px] md:h-[500px] cursor-grab active:cursor-grabbing relative touch-pan-y select-none"
               />
 
               {/* Floating Bottom Navigation Dock */}

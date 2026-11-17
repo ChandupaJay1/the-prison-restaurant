@@ -1,4 +1,5 @@
 import React, { useState, useMemo } from 'react';
+import { SecureImage } from '../security';
 import { motion } from 'framer-motion';
 import { UtensilsCrossed, ShieldCheck, CheckCircle2, MessageCircle, HelpCircle } from 'lucide-react';
 import MenuCategoryFilter from '../components/menu/MenuCategoryFilter';
@@ -43,7 +44,7 @@ export default function MenuPage() {
       {/* Menu Header */}
       <section className="relative py-20 sm:py-28 bg-prison-900 border-b border-prison-800 overflow-hidden">
         <div className="absolute inset-0 z-0">
-          <img
+          <SecureImage
             src="./images/interior-dining-bbq-parata-menu.jpg"
             alt="The Prison Menu Board Dining"
             className="w-full h-full object-cover filter brightness-[0.22] contrast-125"

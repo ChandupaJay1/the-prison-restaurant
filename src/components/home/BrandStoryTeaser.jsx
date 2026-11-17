@@ -1,4 +1,5 @@
 import React from 'react';
+import { SecureImage } from '../../security';
 import { motion } from 'framer-motion';
 import { ShieldAlert, Award, Sparkles, ArrowRight, Check } from 'lucide-react';
 import SectionTitle from '../ui/SectionTitle';
@@ -26,7 +27,7 @@ export default function BrandStoryTeaser() {
                 transition={{ duration: 0.6 }}
                 className="relative z-10 rounded-sm overflow-hidden border-2 border-prison-800 shadow-2xl bg-black"
               >
-                <img
+                <SecureImage
                   src="./images/interior-prison-feature-wall.jpg"
                   alt="The Prison Interior Wall and Dining Booths"
                   className="w-full h-80 sm:h-96 object-cover"
@@ -49,7 +50,7 @@ export default function BrandStoryTeaser() {
                 transition={{ duration: 0.6, delay: 0.2 }}
                 className="absolute -bottom-8 -right-4 sm:-right-8 z-20 w-3/5 rounded-sm overflow-hidden border-2 border-prison-gold/60 shadow-glow-gold bg-black hidden sm:block"
               >
-                <img
+                <SecureImage
                   src="./images/founder-viraj-staff-uniforms.jpg"
                   alt="Founder Viraj Wickramanayake and Team in Branded Uniforms"
                   className="w-full h-48 object-cover"

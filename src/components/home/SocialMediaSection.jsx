@@ -1,4 +1,5 @@
 import React from 'react';
+import { SecureImage } from '../../security';
 import { motion } from 'framer-motion';
 import { Facebook, Instagram, Heart, MessageCircle, ExternalLink, Share2, ThumbsUp } from 'lucide-react';
 import SectionTitle from '../ui/SectionTitle';
@@ -62,7 +63,7 @@ export default function SocialMediaSection() {
                 {/* Header */}
                 <div className="p-4 flex items-center justify-between border-b border-prison-800">
                   <div className="flex items-center gap-2.5">
-                    <img
+                    <SecureImage
                       src="./images/the-prison-logo.jpg"
                       alt="The Prison Page Avatar"
                       className="w-9 h-9 rounded-full border border-prison-gold/40 object-cover"
@@ -81,7 +82,7 @@ export default function SocialMediaSection() {
 
                 {/* Post Image */}
                 <div className="relative h-48 bg-black overflow-hidden">
-                  <img
+                  <SecureImage
                     src={post.image}
                     alt="Facebook Post Graphic"
                     className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500"

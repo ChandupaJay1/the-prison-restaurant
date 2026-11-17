@@ -13,6 +13,7 @@ import {
   UtensilsCrossed
 } from 'lucide-react';
 import Button from '../ui/Button';
+import { loadSecureMedia } from '../../security';
 import { RESTAURANT_INFO } from '../../data/restaurantData';
 
 const SHOWCASE_DISHES = [
@@ -81,7 +82,7 @@ const SHOWCASE_DISHES = [
       { label: 'Sharing', price: 'Counter Special', note: 'Cell Sharing Pot' },
     ],
     description: "The crown jewel crafted according to founder Viraj Wickramanayake's (Mr. Kottu) world-famous technique. Golden rotti ribbons chopped on hot steel with chicken, egg, and velvety cheese.",
-    image: './images/menu-kottu-rotti-spread.jpg',
+    image: './images/interior-dining-bbq-parata-menu.jpg',
     spiceLevel: 2,
     spiceText: 'Custom Heat',
     preparation: 'Iron Griddle Chopped',
@@ -361,11 +362,14 @@ export default function DishShowcase3D() {
     turntable.add(particles);
     stageRef.current.particles = particles;
 
-    // Load initial texture
-    textureLoader.load(SHOWCASE_DISHES[0].image, (tex) => {
-      tex.colorSpace = THREE.SRGBColorSpace;
-      posterMat.map = tex;
-      posterMat.needsUpdate = true;
+    // Load initial texture via Secure Media Vault
+    loadSecureMedia(SHOWCASE_DISHES[0].image).then((blobUrl) => {
+      if (!blobUrl) return;
+      textureLoader.load(blobUrl, (tex) => {
+        tex.colorSpace = THREE.SRGBColorSpace;
+        posterMat.map = tex;
+        posterMat.needsUpdate = true;
+      });
     });
 
     // --- 4. Unified Pointer Events (Mobile Touch & Desktop Mouse Safe) ---
@@ -495,12 +499,20 @@ export default function DishShowcase3D() {
   useEffect(() => {
     const { textureLoader, posterMesh } = stageRef.current;
     if (textureLoader && posterMesh && posterMesh.material) {
-      textureLoader.load(activeDish.image, (tex) => {
-        tex.colorSpace = THREE.SRGBColorSpace;
-        posterMesh.material.map = tex;
-        posterMesh.material.needsUpdate = true;
+      let active = true;
+      loadSecureMedia(activeDish.image).then((blobUrl) => {
+        if (!active || !blobUrl) return;
+        textureLoader.load(blobUrl, (tex) => {
+          if (!active) return;
+          tex.colorSpace = THREE.SRGBColorSpace;
+          posterMesh.material.map = tex;
+          posterMesh.material.needsUpdate = true;
+        });
       });
       stageRef.current.drag.rotY = 0;
+      return () => {
+        active = false;
+      };
     }
   }, [currentIndex, activeDish.image]);
 

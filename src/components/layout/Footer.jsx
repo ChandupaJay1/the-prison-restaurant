@@ -1,4 +1,5 @@
 import React from 'react';
+import { SecureImage } from '../../security';
 import { Link } from 'react-router-dom';
 import { MapPin, Phone, Mail, Clock, Facebook, Instagram, ShieldAlert, ArrowUpRight, Heart } from 'lucide-react';
 import { RESTAURANT_INFO } from '../../data/restaurantData';
@@ -18,7 +19,7 @@ export default function Footer() {
           <div className="space-y-4">
             <Link to="/" className="inline-flex items-center gap-3 group">
               <div className="w-12 h-12 rounded-sm overflow-hidden border border-prison-gold/40 bg-black flex items-center justify-center shrink-0">
-                <img
+                <SecureImage
                   src="./images/the-prison-logo.jpg"
                   alt="The Prison Logo"
                   className="w-full h-full object-cover"

@@ -1,4 +1,5 @@
 import React from 'react';
+import { SecureImage } from '../../security';
 import { motion } from 'framer-motion';
 import { Maximize2, Tag } from 'lucide-react';
 
@@ -11,7 +12,7 @@ export default function GalleryCard({ item, index = 0, onClick }) {
       onClick={() => onClick(item)}
       className="group relative h-72 sm:h-80 rounded-sm overflow-hidden border border-prison-800 bg-black cursor-pointer shadow-lg hover:border-prison-gold/60 transition-all duration-300"
     >
-      <img
+      <SecureImage
         src={item.image}
         alt={item.title}
         loading="lazy"

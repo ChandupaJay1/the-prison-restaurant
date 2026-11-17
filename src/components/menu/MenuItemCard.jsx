@@ -1,4 +1,5 @@
 import React from 'react';
+import { SecureImage } from '../../security';
 import { motion } from 'framer-motion';
 import { CheckCircle2, MessageCircle, Flame, Users, Sparkles } from 'lucide-react';
 import Badge from '../ui/Badge';
@@ -17,7 +18,7 @@ export default function MenuItemCard({ item, index = 0 }) {
       <div>
         {/* Image Container */}
         <div className="relative h-48 sm:h-52 bg-black overflow-hidden">
-          <img
+          <SecureImage
             src={item.image}
             alt={item.name}
             className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500"

@@ -1,4 +1,5 @@
 import React from 'react';
+import { SecureImage } from '../../security';
 import { motion } from 'framer-motion';
 import { Utensils, Calendar, ShieldCheck, MapPin, Sparkles, Flame } from 'lucide-react';
 import Button from '../ui/Button';
@@ -12,7 +13,7 @@ export default function HeroSection() {
       <section className="relative min-h-[92vh] flex flex-col justify-center overflow-hidden bg-prison-950 pt-16">
         {/* Background Image with Dark Vignette & Industrial Overlay */}
         <div className="absolute inset-0 z-0">
-          <img
+          <SecureImage
             src="./images/exterior-night-good-food-bad-boys.jpg"
             alt="The Prison Restaurant Storefront Night"
             className="w-full h-full object-cover object-center filter brightness-[0.16] contrast-125 scale-100"

@@ -1,4 +1,5 @@
 import React from 'react';
+import { SecureImage } from '../security';
 import { motion } from 'framer-motion';
 import { Calendar, Clock, Wine, ShieldAlert, Phone, Users, Check } from 'lucide-react';
 import ReservationForm from '../components/reservation/ReservationForm';
@@ -13,7 +14,7 @@ export default function ReservationsPage() {
       {/* Reservation Header */}
       <section className="relative py-20 sm:py-28 bg-prison-900 border-b border-prison-800 overflow-hidden">
         <div className="absolute inset-0 z-0">
-          <img
+          <SecureImage
             src="./images/interior-prison-feature-wall.jpg"
             alt="The Prison Booths"
             className="w-full h-full object-cover filter brightness-[0.22] contrast-125"

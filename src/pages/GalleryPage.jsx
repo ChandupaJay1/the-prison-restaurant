@@ -1,4 +1,5 @@
 import React, { useState, useMemo } from 'react';
+import { SecureImage } from '../security';
 import { Camera, ShieldCheck, Sparkles } from 'lucide-react';
 import GalleryFilter from '../components/gallery/GalleryFilter';
 import GalleryCard from '../components/gallery/GalleryCard';
@@ -42,7 +43,7 @@ export default function GalleryPage() {
       {/* Gallery Header */}
       <section className="relative py-20 sm:py-28 bg-prison-900 border-b border-prison-800 overflow-hidden">
         <div className="absolute inset-0 z-0">
-          <img
+          <SecureImage
             src="./images/exterior-storefront-neon-night.jpg"
             alt="The Prison Storefront Night"
             className="w-full h-full object-cover filter brightness-[0.25] contrast-125"

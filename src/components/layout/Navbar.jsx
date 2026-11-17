@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { SecureImage } from '../../security';
 import { NavLink, Link, useLocation } from 'react-router-dom';
 import { Menu, X, Phone, UtensilsCrossed, Calendar, ExternalLink } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -50,7 +51,7 @@ export default function Navbar() {
           {/* Logo & Brand Name */}
           <Link to="/" className="flex items-center gap-3 group">
             <div className="relative w-11 h-11 rounded-sm overflow-hidden border border-prison-gold/40 shadow-glow-gold group-hover:border-prison-gold transition-colors bg-black flex items-center justify-center">
-              <img
+              <SecureImage
                 src="./images/the-prison-logo.jpg"
                 alt="The Prison Logo"
                 className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-300"

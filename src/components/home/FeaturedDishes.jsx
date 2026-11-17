@@ -1,4 +1,5 @@
 import React from 'react';
+import { SecureImage } from '../../security';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { CheckCircle2, Flame, Users, ArrowRight, Sparkles } from 'lucide-react';
@@ -45,7 +46,7 @@ export default function FeaturedDishes() {
                 <div className="group bg-prison-850 rounded-sm border border-prison-700/80 overflow-hidden flex flex-col hover:border-prison-gold/60 transition-all duration-300 shadow-xl h-full">
               {/* Image Container with Badges */}
               <div className="relative h-56 overflow-hidden bg-black">
-                <img
+                <SecureImage
                   src={dish.image}
                   alt={dish.name}
                   className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500"

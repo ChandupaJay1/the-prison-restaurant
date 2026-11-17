@@ -1,4 +1,5 @@
 import React from 'react';
+import { SecureImage } from '../security';
 import { motion } from 'framer-motion';
 import { ShieldAlert, Users, Award, Wine, Trees, Music, ArrowRight, Heart } from 'lucide-react';
 import SectionTitle from '../components/ui/SectionTitle';
@@ -14,7 +15,7 @@ export default function AboutPage() {
       {/* Hero Header */}
       <section className="relative py-24 sm:py-32 bg-prison-900 border-b border-prison-800 overflow-hidden">
         <div className="absolute inset-0 z-0">
-          <img
+          <SecureImage
             src="./images/interior-prison-feature-wall.jpg"
             alt="The Prison Interior"
             className="w-full h-full object-cover filter brightness-[0.25] contrast-125"
@@ -79,7 +80,7 @@ export default function AboutPage() {
 
           <div className="lg:col-span-6 space-y-4">
             <div className="rounded-sm overflow-hidden border border-prison-700 shadow-2xl bg-black">
-              <img
+              <SecureImage
                 src="./images/opening-ceremony-dancers-location.jpg"
                 alt="Traditional Wes Dancers at The Prison Grand Opening"
                 className="w-full h-80 object-cover"
@@ -92,7 +93,7 @@ export default function AboutPage() {
 
             <div className="grid grid-cols-2 gap-4">
               <div className="rounded-sm overflow-hidden border border-prison-700 bg-black">
-                <img
+                <SecureImage
                   src="./images/founder-viraj-staff-uniforms.jpg"
                   alt="Founder Viraj Wickramanayake with Uniformed Staff"
                   className="w-full h-44 object-cover"
@@ -103,7 +104,7 @@ export default function AboutPage() {
               </div>
 
               <div className="rounded-sm overflow-hidden border border-prison-700 bg-black">
-                <img
+                <SecureImage
                   src="./images/grand-opening-ribbon-cutting.jpg"
                   alt="Grand Opening Ribbon Cutting"
                   className="w-full h-44 object-cover"

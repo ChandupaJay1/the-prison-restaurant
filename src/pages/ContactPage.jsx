@@ -1,4 +1,5 @@
 import React from 'react';
+import { SecureImage } from '../security';
 import { MapPin, Phone, Mail, Clock, Send, MessageCircle, ExternalLink } from 'lucide-react';
 import ContactInfoCards from '../components/contact/ContactInfoCards';
 import LocationsDetail from '../components/contact/LocationsDetail';
@@ -16,7 +17,7 @@ export default function ContactPage() {
       {/* Contact Header */}
       <section className="relative py-20 sm:py-28 bg-prison-900 border-b border-prison-800 overflow-hidden">
         <div className="absolute inset-0 z-0">
-          <img
+          <SecureImage
             src="./images/exterior-night-good-food-bad-boys.jpg"
             alt="The Prison Night Street View"
             className="w-full h-full object-cover filter brightness-[0.22] contrast-125"
@@ -67,7 +68,7 @@ export default function ContactPage() {
             </h3>
 
             <div className="rounded overflow-hidden border border-prison-800 bg-black">
-              <img
+              <SecureImage
                 src="./images/map-delivery-coverage-zone.jpg"
                 alt="Delivery Coverage Map for The Prison"
                 className="w-full h-64 object-cover"

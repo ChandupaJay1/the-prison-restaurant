@@ -1,4 +1,5 @@
 import React from 'react';
+import { SecureImage } from '../../security';
 import { Sparkles, MessageCircle, ArrowRight } from 'lucide-react';
 import Button from '../ui/Button';
 import { SPECIAL_DEALS } from '../../data/menuData';
@@ -26,7 +27,7 @@ export default function MenuSpecialDeals() {
 
             <div>
               <div className="h-40 rounded-sm overflow-hidden mb-4 bg-black">
-                <img
+                <SecureImage
                   src={deal.image}
                   alt={deal.title}
                   className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500"

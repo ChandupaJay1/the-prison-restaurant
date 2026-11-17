@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { SecureImage } from '../../security';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, ChevronLeft, ChevronRight, Tag } from 'lucide-react';
 
@@ -88,7 +89,7 @@ export default function LightboxModal({
           onClick={(e) => e.stopPropagation()}
         >
           <div className="relative rounded overflow-hidden border border-prison-800 shadow-2xl bg-black">
-            <img
+            <SecureImage
               src={activeItem.image}
               alt={activeItem.title}
               className="max-h-[65vh] w-auto object-contain mx-auto"
